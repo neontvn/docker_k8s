@@ -20,12 +20,12 @@ Creating a Pod ( With example and explaination )
 File - posts.yaml
 
 apiVersion : v1
-kind : Pod          //Creates a pod
+kind : Pod              // Type of Object we want to create
 metadata :
-    name : posts    //Name given is posts
-spec :
-    containers: 
-        - name : posts
+    name : posts        // pod is given name of posts
+spec :                  // Exact attributes  we want to apply to the object
+    containers:         // We can create multiple containers inside a pod
+        - name : posts                      //Container with name posts
           image : hungryshark/posts:0.0.1   //Image from which it is going to be created
           imagePullPolicy: IfNotPresent
 
