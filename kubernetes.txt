@@ -1,0 +1,34 @@
+Kubernetes Terminology
+
+1. Kubernetes Cluster - collection of nodes
+2. Node - Virtual machine that will run code
+3. Pods - Running container. Technically a pod can run multiple containers
+4. Deployment - Monitors a set of pods, makes sure they are running and restarts if crashed
+5. Service - Provides an easy to remember URL to access a running container
+
+Kubernetes Config Files
+ - Tells Kubernetes about the Deployments, Pods, Services ( Referred to as Objects )
+ - Written in YAML syntax
+ - Documentation
+
+___________________________________________________________________________________________
+
+Creating a Pod ( With example and explaination )
+
+File - posts.yaml
+
+apiVersion : v1
+kind : Pod          //Creates a pod
+metadata :
+    name : posts    //Name given is posts
+spec :
+    containers: 
+        - name : posts
+          image : hungryshark/posts:0.0.1   //Image from which it is going to be created
+          imagePullPolicy: IfNotPresent
+
+kubectl apply -f posts.yaml     //To tell kubernetes to use this config file
+
+kubectl get pods                //Get information of the existing pods
+
+___________________________________________________________________________________________
