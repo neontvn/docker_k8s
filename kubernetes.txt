@@ -25,12 +25,16 @@ metadata :
     name : posts        // pod is given name of posts
 spec :                  // Exact attributes  we want to apply to the object
     containers:         // We can create multiple containers inside a pod
-        - name : posts                      //Container with name posts
-          image : hungryshark/posts:0.0.1   //Image from which it is going to be created
+        - name : posts                      // Container with name posts
+          image : hungryshark/posts:0.0.1   // Image from which it is going to be created
           imagePullPolicy: IfNotPresent
 
-kubectl apply -f posts.yaml     //To tell kubernetes to use this config file
+kubectl apply -f posts.yaml     // To tell kubernetes to use this config file
 
-kubectl get pods                //Get information of the existing pods
-
+kubectl get pods                        // Get information of the existing pods
+kubectl exec -it [pod-name][command]    // Execute the given command in a running pod
+kubectl logs [pod-name]                 // Prints out logs from the given pod
+kubectl delete pod [pod-name]           // Delete the pod
+kubectl apply -f [config file name]     // Tell k8s to process the config
+kubectl describe pod [pod-name]         // Print out some information about the running pod
 ___________________________________________________________________________________________
