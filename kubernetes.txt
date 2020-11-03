@@ -50,20 +50,20 @@ CREATING A DEPLOYMENT
 
 File - posts-depl.yaml
 
-apiVersion : apps/v1
-kind : Deployment               // Type of Object we want to create
-metadata : 
-    name : posts-depl           // Name of the deployment   
-spec :                          // How deployment should behave
-    replicas : 1                // Number of pods running a particular image
-    selector :                  // Deployment gets to know which pods to manage
-        matchLabels :
-            app : posts         // Key : Value can be xyz : posts as well
-    template :                  // Specify exact config of pod to be created
-        metadata :
-            labels:
-                app : posts     // Key : value pair assigned same as above
-        spec :                  // Config of pods
-            containers :            // Container created in pod
-                -   name : posts    // Container with name posts
-                    image : hungryshark/posts:latest    // Image to be run in the container
+        apiVersion : apps/v1
+        kind : Deployment               // Type of Object we want to create
+        metadata : 
+            name : posts-depl           // Name of the deployment   
+        spec :                          // How deployment should behave
+            replicas : 1                // Number of pods running a particular image
+            selector :                  // Deployment gets to know which pods to manage
+                matchLabels :
+                    app : posts         // Key : Value can be xyz : posts as well
+            template :                  // Specify exact config of pod to be created
+                metadata :
+                    labels:
+                        app : posts     // Key : value pair assigned same as above
+                spec :                  // Config of pods
+                    containers :            // Container created in pod
+                        -   name : posts    // Container with name posts
+                            image : hungryshark/posts:latest    // Image to be run in the container
