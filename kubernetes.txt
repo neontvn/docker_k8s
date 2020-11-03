@@ -38,3 +38,32 @@ kubectl delete pod [pod-name]           // Delete the pod
 kubectl apply -f [config file name]     // Tell k8s to process the config
 kubectl describe pod [pod-name]         // Print out some information about the running pod
 ___________________________________________________________________________________________
+
+
+DEPLOYMENTS
+
+- Rather than creating individual pods we create a Deployment object which manages a set of k8s pods.
+- Pod crashes, then deployment automatically creates the pods for us.
+- Version of pods may change in due course of time. Deployment helps in managing the same.
+
+CREATING A DEPLOYMENT
+
+File - posts-depl.yaml
+
+apiVersion : apps/v1
+kind : Deployment               // Type of Object we want to create
+metadata : 
+    name : posts-depl           // Name of the deployment   
+spec :                          // How deployment should behave
+    replicas : 1                // Number of pods running a particular image
+    selector :                  // Deployment gets to know which pods to manage
+        matchLabels :
+            app : posts         // Key : Value can be xyz : posts as well
+    template :                  // Specify exact config of pod to be created
+        metadata :
+            labels:
+                app : posts     // Key : value pair assigned same as above
+        spec :                  // Config of pods
+            containers :            // Container created in pod
+                -   name : posts    // Container with name posts
+                    image : hungryshark/posts:latest    // Image to be run in the container
