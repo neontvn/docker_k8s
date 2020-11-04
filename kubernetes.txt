@@ -133,9 +133,9 @@ spec:
 
 
 kubectl apply -f posts-srv.yaml
-kubectl get services
 
-posts-serv   NodePort    10.105.8.62   <none>   4000:32536/TCP   8m27s
+Command - kubectl get services
+Output - posts-serv   NodePort    10.105.8.62   <none>   4000:32536/TCP   8m27s
 
 4000:32536/TCP - Here 32536 is the port at which the app is made accessible from outside the cluster
 
