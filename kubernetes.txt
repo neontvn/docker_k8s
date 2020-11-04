@@ -13,6 +13,14 @@ Kubernetes Config Files
  - Written in YAML syntax
  - Documentation
 
+Minikube : 
+
+    --> Minikube runs a single-node Kubernetes cluster on your personal computer
+    --> A one node cluster, where the master and worker processes are on the same machine.
+
+Commands
+    |_ minikube start
+    |_ minikube dashboard
 ___________________________________________________________________________________________
 
 Creating a Pod ( With example and explaination )
@@ -67,3 +75,77 @@ spec :                          // How deployment should behave
             containers :            // Container created in pod
                 -   name : posts    // Container with name posts
                     image : hungryshark/posts:latest    // Image to be run in the container
+                    
+___________________________________________________________________________________________
+
+
+kubectl apply -f [config file name]             // Create deployment out of config file
+kubectl get deployments                         // Lists all the deployments
+kubectl describe deployment [depl name]         // Print out details of specific deployment
+kubectl delete deployment [depl-name]           // Delete a deployment
+
+___________________________________________________________________________________________
+
+
+Updating a deployment : Two ways to do it
+
+First Method
+
+1. Make a change to your project code
+2. Rebuild the image, specifying a new image Version
+3. In the deployment config file, update the version of the image
+4. Run kubectl apply -f [depl file name]
+
+Second Method ( Generally preferred )
+
+1. The deployment must be using the 'latest' tag in the pod spec section
+2. Make an update to the code
+3. Build the image
+4. Push the image to docker hub
+5. Run the command :  kubectl rollout restart deployment [depl-name]
+
+___________________________________________________________________________________________
+
+SERVICES
+
+Types of Services
+    - Cluster IP - Set up an easy-to-remember URL to access a pod. Only exposes pods in the cluster
+    - Node Port - Makes a pod accessible from outside the cluster. Usualy for dev purposes
+    - Load Balancer - Makes a pod accessible from outside the cluster.
+    - External Name - Redirects as in-cluster request to a CNAME URL
+
+
+NodePort - File posts-srv.yaml
+
+apiVersion : v1
+kind : Service
+metadata :
+    name : posts-serv
+spec:
+    type : NodePort             // Object type
+    selector:
+        app : posts             // This service is applicable to this app
+    ports :
+        - name : posts          // Details of the port
+          protocol : TCP
+          port : 4000           // Port number of Node Port Service
+          targetPort : 4000     // Port number of where the posts app is served ( mentioned in posts/index.js )
+
+
+kubectl apply -f posts-srv.yaml
+kubectl get services
+
+posts-serv   NodePort    10.105.8.62   <none>   4000:32536/TCP   8m27s
+
+4000:32536/TCP - Here 32536 is the port at which the app is made accessible from outside the cluster
+
+minikube ip - Gives the ip address of the minikube cluster
+Generally, 192.x.x.x
+
+Example, 192.168.44.2:32536/posts 
+
+___________________________________________________________________________________________
+
+
+
+
