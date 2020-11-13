@@ -146,6 +146,22 @@ Example, 192.168.44.2:32536/posts
 
 ___________________________________________________________________________________________
 
+CLUSTER IP Services
+
+contd to the above file
+---
+apiVersion : v1
+kind : Service
+metadata : 
+    name : posts-clusterip-srv
+spec : 
+    selector : 
+        app : posts
+    ports :
+        - name : posts
+          protocol : TCP
+          port : 4000   
+          targetPort : 4000
 
 
 
