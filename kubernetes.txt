@@ -163,5 +163,46 @@ spec :
           port : 4000   
           targetPort : 4000
 
+___________________________________________________________________________________________
+
+The react app is set up in a pod as react app dev service which returns the HTML, JS, CSS back to the browser.
+
+Now it is the browser which makes request for the actual data.
+
+Option 1  : We can have NodePort for each pod which exposes the pod to external through a random port which may change sometime
+            in near future. Therefore it is a very inefficient way of doing the same.
+Option 2  : Rather than exposing all the pods we can a load balancer service which gives a single point of entry to the cluster
+            LBS takes the request and routes to the particular port.
+
+
+Load Balancer and Ingress
+
+Load Balancer Service : Tell Kubernetes to reach out to its provider and provision a load balancer.
+                        Gets traffic to a single pod
+Ingress : A pod with set of routing rules to distribute traffic to other services.
+
+So we have ingress/ ingress controller ( used here interchangably in this scenario ) which has the specific rules written 
+to set the routing to a particular pod.
+
+___________________________________________________________________________________________
+
+ingress-nginx : Open source library that will create a Load Balancer Service + an Ingress for the user.
+
+To add ingress controller to minikube use the following command : 
+    $ minikube addons enable ingress
+
+Now that we have the ingress controller in our cluster, there is a need to specify the routing rules.
+Config file contains the router rules.
+
+Config File ( ingress-srv.yaml )
+
+apiVersion : networking.k8s.io/v1beta1
+kind : Ingress
+metadata : 
+  name : ingress-srv
+  annotations:                              // This section tells the ingress-controller that we are trying to feed it some routing rules. 
+    kubernetes.io/ingress.class : nginx     // ingress-controller scans all the different objects / config files and tries to find the one with the mentioned annotation.
+
+    
 
 
