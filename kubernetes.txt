@@ -195,14 +195,122 @@ Now that we have the ingress controller in our cluster, there is a need to speci
 Config file contains the router rules.
 
 Config File ( ingress-srv.yaml )
+___________________________________________________________________________________________
 
 apiVersion : networking.k8s.io/v1beta1
 kind : Ingress
 metadata : 
   name : ingress-srv
   annotations:                              // This section tells the ingress-controller that we are trying to feed it some routing rules. 
-    kubernetes.io/ingress.class : nginx     // ingress-controller scans all the different objects / config files and tries to find the one with the mentioned annotation.
+    kubernetes.io/ingress.class : nginx     // ingress-controller scans all the different objects / config files and tries to find the one 
+                                            // with the mentioned annotation.
+    nginx.ingress.kubernetes.io/use-regex : 'true' // For using regex 
+spec : 
+  rules:
+    - host : posts.com                      // Hosting many different apps at different domains. Here we trick the computer to connect to 
+      http :                                // our machine using the alias. Set {minikube ip} posts.com in /etc/hosts file. 
+        paths: 
+          - path : /posts                   // Route to the post microservice name on port 4000
+            backend : 
+              serviceName : posts-clusterip-srv     // We send it to the service and not the pod directly because the communication takes
+              servicePort : 4000                    // place through the services only within the cluster
+          - path : /posts
+            backend : 
+              serviceName : query-srv
+              servicePort : 4002
+          - path : /posts/?(.*)/comments
+            backend : 
+              serviceName : comments-srv
+              servicePort : 4001
+          - path : /?(.*)
+            backend : 
+              serviceName : client-srv
+              servicePort : 3000
+___________________________________________________________________________________________
 
-    
+Changing the url within the react app from localhost:400x to posts.com now enables these rules to be used and the 
+react app is served from posts.com
 
+Big issue : Rebuilding the entire image again and pushing to docker hub or for that matter updating the k8s files as well
+manually is tedious task. So we use Scaffold.
+___________________________________________________________________________________________
 
+Scaffold : Skaffold handles the workflow for building, pushing and deploying your application, allowing you to focus on 
+what matters most: writing code.
+
+Installation Step:
+    -> curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+        sudo install skaffold /usr/local/bin/
+
+We create a skaffold config file outside our project/cluster.
+
+skaffold.yaml:
+___________________________________________________________________________________________
+
+apiVersion : skaffold/v2alpha3
+kind : Config
+deploy :
+  kubectl:
+    manifests:
+      - ./infra/k8s/*           // Folder which contains all the deployments
+build :
+  local : 
+    push : false
+  artifacts :
+    - image : hungryshark/client    // Individual images of the different pods
+      context : client
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : 'src/**/*.js'     // Look out for the src folder and subfolders for any changes if any just push into the pod
+            dest : .                // Else just rebuild the image again if outside src folder
+    - image : hungryshark/comments
+      context : comments
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : '*.js'            // Here we are concerned with the .js file only
+            dest : .
+    - image : hungryshark/posts
+      context : posts
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : '*.js'
+            dest : .
+    - image : hungryshark/query
+      context : query
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : '*.js'
+            dest : .
+    - image : hungryshark/event-bus
+      context : event-bus
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : '*.js'
+            dest : .
+    - image : hungryshark/moderation
+      context : moderation
+      docker:
+        dockerfile : Dockerfile
+      sync:
+        manual:
+          - src : '*.js'
+            dest : .
+___________________________________________________________________________________________
+
+ - Once this is done all we have to do is to run : skaffold dev
+ - This creates objects which are required for the application and detects for any changes inside the project/cluster.
+ - Once we exit the skaffold dev using Ctrl + C. All the deployments are DELETED and thereby no resources are left once we
+   exit the skaffold.
+ - This enables easy switching between the projects without actually bothering to delete the deployments manually
+
+___________________________________________________________________________________________
