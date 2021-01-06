@@ -24,4 +24,16 @@ docker build
 
 An instance of a Docker image. A container represents the execution of a single application, process, or service. It consists of the contents of a Docker image, an execution environment, and a standard set of instructions. When scaling a service, you create multiple instances of a container from the same image. Or a batch job can create multiple containers from the same image, passing different parameters to each instance.
 
+### Docker run in detail
 
+Creating and running a Container from the image
+
+```
+$ docker run image-name
+```
+
+Whenever we execute this command, it first **creates a writeable container layer over the specified image**, and then **starts it using the specified command**. That is, docker run is equivalent to the API **/containers/create** then **/containers/(id)/start**. A stopped container can be restarted with all its previous changes intact using **docker start**. 
+
+To List all the containers created
+
+See ```docker ps -a``` to view a list of all containers.
