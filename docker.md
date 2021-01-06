@@ -22,3 +22,4 @@ An instance of a Docker image. A container represents the execution of a single 
 Why use Docker?
 
 > Docker makes it really easy to install and run software without worrying about the setup and dependencies.
+> Developing apps today requires so much more than writing code. Multiple languages, frameworks, architectures, and discontinuous interfaces between tools for each lifecycle stage creates enormous complexity. Docker simplifies and accelerates your workflow, while giving developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project.
