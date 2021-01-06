@@ -1,30 +1,24 @@
-Kubernetes Terminology
+## Docker Terminology
 
-1. Kubernetes Cluster - collection of nodes
-2. Node - Virtual machine that will run code
-3. Pods - Running container. Technically a pod can run multiple containers
-4. Deployment - Monitors a set of pods, makes sure they are running and restarts if crashed
-5. Service - Provides an easy to remember URL to access a running container
+### What is Docker?
 
-Kubernetes Config Files
- - Tells Kubernetes about the Deployments, Pods, Services ( Referred to as Objects )
- - Written in YAML syntax
- - Documentation
+> Docker is a platform or ecosystem around creating and running containers. It contains of the Docker - client, server, hub etc.
 
-Minikube : 
+### Container Image
 
-    --> Minikube runs a single-node Kubernetes cluster on your personal computer
-    --> A one node cluster, where the master and worker processes are on the same machine.
+A package with all the dependencies and information needed to create a container. An image includes all the dependencies (such as frameworks) plus deployment and execution configuration to be used by a container runtime. Usually, an image derives from multiple base images that are layers stacked on top of each other to form the container's filesystem. An image is immutable once it has been created.
 
-Commands
-    |_ minikube start
-    |_ minikube dashboard
-___________________________________________________________________________________________
+### Build
 
-Creating a Pod ( With example and explaination )
+The action of building a container image based on the information and context provided by its Dockerfile, plus additional files in the folder where the image is built. You can build images with the following Docker command : <br>
+```
+docker build
+```
 
-File - posts.yaml
+### Container
 
-apiVersion : v1
-kind : Pod              // Type of Object we want to create
-metadata :
+An instance of a Docker image. A container represents the execution of a single application, process, or service. It consists of the contents of a Docker image, an execution environment, and a standard set of instructions. When scaling a service, you create multiple instances of a container from the same image. Or a batch job can create multiple containers from the same image, passing different parameters to each instance.
+
+Why use Docker?
+
+> Docker makes it really easy to install and run software without worrying about the setup and dependencies.
