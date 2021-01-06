@@ -1,5 +1,3 @@
-Docker Terminology
-
 Kubernetes Terminology
 
 1. Kubernetes Cluster - collection of nodes
